@@ -17,7 +17,7 @@ namespace Project_SE1729.Controllers
             List<Product> listproducts = new List<Product>();
             if(Categoryid != 0)
             {
-                listproducts = dbcontext.Products.Include(x=>x.CidNavigation).Where(x => x.Cid == Categoryid).ToList();
+                listproducts = dbcontext.Products.Include(x=>x.CidNavigation).Where(x => x.Cid == Categoryid).OrderByDescending(x=>x.Price).Take(2).ToList();
             }
             else
             {
@@ -29,9 +29,12 @@ namespace Project_SE1729.Controllers
 
             return View("Index");
         }
-        public IActionResult AddCart(string Productid , int Categoryid)
+        
+        public IActionResult Detail(string Productid)
         {
-            return View("AddCart");
+            Product product = dbcontext.Products.Include(x=>x.CidNavigation).SingleOrDefault(x => x.ProductId == Productid);
+            ViewBag.Product = product;
+            return View("Detail");
         }
     }
 }
